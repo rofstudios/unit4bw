@@ -1,4 +1,5 @@
 # African Marketplace API
+## API - https://african-marketplace-bw4.herokuapp.com
 # ENDPOINTS-status - wip
 
 ## Database SCHEMA(s)

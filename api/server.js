@@ -39,6 +39,10 @@ server.use('/api/auth', authRouter);
 server.use('/api/owners', restricted, ownersRouter);
 server.use('/api/users', usersRouter);
 
+server.get('/', (req, res) => {
+  res.send(`<h1> Welcome to African Marketplace API </h1>`)
+})
+
 server.use((err, req, res, next) => { // eslint-disable-line
   res.status(err.status || 500).json({
     message: err.message,
