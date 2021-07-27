@@ -4,7 +4,6 @@ let router = express.Router();
 let bcryptjs = require('bcryptjs');
 let tokenBuilder = require('./tokenbuilder');
 let Owners = require('../owners/owners-module');
-const tokenbuilder = require('./tokenbuilder');
 
 
 router.post('/register', (req, res, next) => {
@@ -21,19 +20,22 @@ router.post('/register', (req, res, next) => {
 
 })
 
-router.post('/login', (req, res) => {
+router.post('/login', (req, res, next) => {
     let creds = req.body;
 
     Owners.login({ email: creds.email })
         .then(user => {
             if (user && bcryptjs.compareSync(creds.password, user.password)) {
-                let token = tokenbuilder(user);
+                let token = tokenBuilder(user);
                 res.status(200).json({
                     message: `Welcome back ${user.email}`,
                     token,
-                });
+                })
+            } else {
+                next({ status: 401, message: "invalid credentials" })
             }
         })
+        .catch(next)
 
 })
 
