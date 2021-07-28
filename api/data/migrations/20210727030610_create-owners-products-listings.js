@@ -18,6 +18,7 @@ exports.up = async (knex) => {
       tbl
         .integer('owner_id')
         .unsigned()
+        .notNullable() // added
         .references('owners.owner_id')
         .onDelete('RESTRICT')
         .onUpdate('CASCADE')
@@ -25,7 +26,7 @@ exports.up = async (knex) => {
       tbl.string('listing_name', 200).notNullable();
       tbl.string('listing_description', 255).nullable();
       tbl.string('listing_location', 128).notNullable();
-      tbl.decimal('listing_price', 12, 4).notNullable();
+      tbl.decimal('listing_price', 10, 2).notNullable();
     })
 }
 
