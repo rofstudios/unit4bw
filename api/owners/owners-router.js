@@ -14,7 +14,7 @@ router.get('/', (req, res, next) => {
         .catch(next)
 
 })
-// GETS all item listings
+// GETS all item listings of logged owner
 router.get('/listing', (req, res, next) => {
     let ownerId = req.jwt.subject;
 
