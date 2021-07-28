@@ -3,7 +3,6 @@ let { jwtSecret } = require('../../config/secrets');
 
 module.exports = (req, res, next) => {
     let token = req.headers.authorization;
-    console.log(token, "this is token from header")
 
     if (!token) {
         // clean up message by removing front end purposes

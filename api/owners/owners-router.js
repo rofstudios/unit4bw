@@ -3,12 +3,9 @@ let Owner = require('./owners-module');
 
 // GETS owner information + adds listings total
 router.get('/', (req, res, next) => {
-    console.log('hello')
     let ownerId = req.jwt.subject;
-    console.log(ownerId, 'ownerid')
     Owner.getOwner(ownerId)
         .then(owner => {
-            console.log(owner, 'ownerrrrr')
             res.status(200).json(owner);
         })
         .catch(next)
@@ -49,15 +46,52 @@ router.get('/listing/:id', (req, res, next) => {
     let { id } = req.params;
     Owner.getItemById(id)
         .then(listing => {
-            listing.listing_price = Number(listing.listing_price)
-            if (listing) {
-                res.status(200).json(listing);
-            } else {
+            if (!listing) {
                 res.status(404).json({ message: `no item found with id: ${id}` })
+            } else {
+                listing.listing_price = Number(listing.listing_price)
+                res.status(200).json(listing);
             }
         })
         .catch(next)
 })
 
+router.put('/listing/:id', (req, res, next) => {
+    let id = req.params.id;
+    let changes = req.body;
+    if (changes.listing_category || changes.listing_name || changes.listing_description || changes.listing_location || changes.listing_price) {
+        Owner.update(id, changes)
+            .then(changed => {
+                console.log(changed, 'changed')
+                if (!changed) {
+                    res.status(400).json({ message: `no listing to update found under id: ${id}` })
+                } else {
+                    res.status(200).json(changed)
+                }
+            })
+            .catch(next)
+    } else {
+        res.status(400).json({ message: 'requires at least one property to be updated' })
+    }
+
+})
+
+router.delete('/listing/:id', (req, res, next) => {
+    let { id } = req.params;
+
+    Owner.remove(id)
+        .then(returned => {
+            console.log(returned, "returned logged")
+            if (returned == null) {
+                res.status(400).json({ message: `no listing to delete found under id: ${id}` })
+            } else {
+                if (returned > 0) {
+                    res.status(200).json({ message: `successfully removed listing under id: ${id}` })
+                } else {
+                    next();
+                }
+            }
+        })
+})
 
 module.exports = router;

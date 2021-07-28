@@ -27,7 +27,6 @@ async function getAllOwnerItems(ownerId) { // added
             }
         ))
     }
-    // return allItems;
 }
 
 function addListing(listing) {
@@ -45,9 +44,24 @@ async function getOwner(ownerId) { // gets owner info and adds a count of all it
 }
 
 function getItemById(id) {
-    return db('listings').select('*').where('listing_id', id).first();
+    return db('listings').where('listing_id', id).first();
 }
 
+async function update(id, change) {
+    let returned = await getItemById(id);
+    if (!returned) {
+        return null
+    } else {
+        return db('listings')
+            .where('listing_id', id)
+            .update(change, ['listing_id', 'owner_id', 'listing_category', 'listing_name', 'listing_description', 'listing_location', 'listing_price'])
+    }
+}
+
+async function remove(id) {
+    let resource = await getItemById(id)
+    return !resource ? null : db('listings').where('listing_id', id).del();
+}
 
 // ================================= USERS ===================================
 async function getListings() {
@@ -73,6 +87,8 @@ module.exports = {
     addListing,
     getOwner,
     getItemById,
+    update,
+    remove,
 
     // users-model
     getListings,

@@ -22,7 +22,6 @@ router.post('/register', (req, res, next) => {
 
 router.post('/login', (req, res, next) => {
     let creds = req.body;
-    console.log
     Owners.login({ email: creds.email })
         .then(user => {
             if (user && bcryptjs.compareSync(creds.password, user.password)) {

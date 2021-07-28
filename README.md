@@ -158,7 +158,7 @@ Response:
 ```
 
 ## GET individual listings by id, only accessible to owners
->- GET api/owners/listings/:id
+>- GET /api/owners/listings/:id
 
 Response:
 ```js
@@ -170,5 +170,47 @@ Response:
     listing_description: string,
     listing_location: string,
     listing_price: num
+}
+```
+
+## PUT update a single listing dynamically, only accessible to owners || :id is replaced by the id of the listing to be updated
+> - GET /api/owners/listing/:id
+>   * Requires any of the following properties in order to update.
+>   * Responds with the entire object of the listing
+>   * 200 status code - successfully updated, returns object of the updated listing
+>   * 400 status code - missing information in body to update || listing does not exist
+
+Require:
+```js
+{
+    listing_category: string,
+    listing_name: string,
+    listing_description: string,
+    listing_location: string,
+    listing_price: num
+}
+```
+Response:
+```js
+{
+  listing_id: num,
+  owner_id: num,
+  listing_category: string,
+  listing_name: string,
+  listing_description: string,
+  listing_location: string,
+  listing_price: num
+}
+```
+
+## DELETE removes a single listing dynamically, only accessible to owners || :id is replaced by the id of the listing to be deleted
+> - DELETE /api/owners/listing/:id
+>   * 200 status code - successfully removed, returns a message
+>   * 400 status code - listing does not exist in the database
+
+Response: 200 OK
+```js
+{ 
+  message: `successfully removed listing under id: ${id}`
 }
 ```
